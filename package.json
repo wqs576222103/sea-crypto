@@ -1,0 +1,24 @@
+{
+  "name": "encrypt-utils",
+  "version": "1.0.0",
+  "description": "aes+rsa加解密工具",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "mocha --reporter spec"
+  },
+  "keywords": [
+    "typescript"
+  ],
+  "author": "wangqs",
+  "license": "ISC",
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "js-crypto-rsa": "^1.0.4"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^9.2.2",
+    "typescript": "^4.6.3"
+  }
+}
