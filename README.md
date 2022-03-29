@@ -1,5 +1,5 @@
 # AES+RSA请求统一加解密工具
-
+[![Build Status](https://app.travis-ci.com/wqs576222103/encrypt-utils.svg?token=T85MtSayTDJVsGq9odzs&branch=main)](https://app.travis-ci.com/wqs576222103/encrypt-utils)
 
 
 # 添加依赖
@@ -13,5 +13,7 @@ yarn add encrypt-utils
 2、请求时调用xxxx方法加密请求数据
 
 3、请求数据返回时调用xxxx方法解密请求数据
+
+
 
 
