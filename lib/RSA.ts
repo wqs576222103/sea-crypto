@@ -1,5 +1,10 @@
 import { ab2base64Str, base64Str2ab, str2ab, ab2str } from "./utils.js";
 
+const RSA_CONFIG = {
+  name: "RSA-OAEP",
+  hash: { name: "SHA-512" },
+};
+
 const keyStorage: TkeyStorage = {
   PRIVATE_KEY:
     "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCHQrZ0kuI9midV2Ky08TIdxDbL6wsiQcsApG90SIZhWBCs42lfX8Gvyn7RRBKw9KoYRwshybLbnfLKEb/t9BS0zKtzxnLOL2GAXhSgNWXAV7YMQuiy9ScvpS2uiBL6OA7eP5+qmRtGh41FZs9GbTiYg2AvpZkgvnJsALP3TteRXoujVnq3MKTZpzfcFAiHIdWz9gIhZYfWRnZUamHK3Xyiysk/6QLs3n8nXjDRc2UyOVUmryl4uhNJ8p/Q3AnlXtWpyT3yImq/JS8/L7GRUuDD9EOdlngAlkcDp1gCfclJQcyoTsA6Yc1p0p3NmcbVWeUGZ9O3SsjEW2ckwNpaWDe5AgMBAAECggEAAfZ23VQwUkKFZZqCTxHc70+kl+ruO24G+xhnwaE3yfvUKh4WrlqeXeWrV3AMcWLrgPSu9auOm9874bDGPza2gjUiG8j6a4GGga1b0UNVGahsLNtfsxEZo3hbJFg3Jkhf9tunfntASRK4exRV16jIFHZ7k9VsVmxNDsIn2mPbfvGBv1yCtlsuCiBlZ58faQzitQmuhd+N50OV6M8+3NIwgOKp9VTWqHEWIU9INxaTtoplL3x7u9nkuN9Hn5Y2XQGKulxyVduj549v9/3Wh41GpisQvK4fQxs9erg+bUy+mCUr8k5TFh9WdpJ+gF2dX2LTpodoKH0Up6ZtV2usQ5s9gQKBgQDnrKaKM1rvLqVIJjdECg/ygdkOpwgsNsZCS3Mb0eAJcaZAs7sotMGiVj+c4Qe+QbwnLILqW83ggrBK/YhpL0Nn1nGorFTkEb7yGBv4AzITl2WjSInirjjD4ALvrM6o6s60w/Olp/MMrCenH0aX3ZG+jQu61miFyPfzw5m127F+kQKBgQCVdnuyXi1b8fTfSPetj5B44t3PQdBcv6wI27NBpcvU4005Iz/kGpITWxpmE72KGrkDeiCcs4AZRLOG7ko4NOvamsPhGjNYDa1ukXWR4RdTYWUyTUfSGOR89Wp9/ias6n3WFLy22exOoOA+UsTaLDhkj6/mTH7kTKlxRFh9QJoKqQKBgE3nmuEiP9PqZZ4La84vbAlqbKkmtfLYQHcOlBiozKOgWf2r8qXPksWaJy4D5eyugizSJPvV/zcd+1ZcR0DHqe0DCZlkye8foIwcW1tdB7vaz0zHGcbmOyRy8cnS3HOk8fmLYyUzguGiCnuCYuSyl03ydB1R+Df0ypxoDApBZEBhAoGAePUwWkPZVaXU1LdKqo2bEBoaBFdw9v6vjWOwCJrTAPELWAhs9n+CZGPAU4f6RsAlpui5Z9fk/Y4Z9EL4kdBSZ9IEYDJCByrahrb1fR+7LuGNck4Up7U5hN9gVaLPTfVf7VdO+nQWx/NuR0HYyfArm0alxi12K/DW2DHFo2gawjECgYAIfSyU+9YmqGiRmBb8VGh8lx8SpL0f0iOjTBZnSNPtRUSLMwCnATBvscUsVpYCaUvDVDwsVdvk5XxZ53Kp6UZHyWqTiskI7LT4dioIdbQfuW2gC2KJjMzCOcjAfS+9GyUhhA1Y1mlv5rscqMPNMwOkOJtBIDXZcI5+oIb0DL1FUw==\n-----END PRIVATE KEY-----",
@@ -47,8 +52,8 @@ function base64Key2CryptoKey(pem: string, isPrivate: boolean) {
     isPrivate ? "pkcs8" : "spki",
     binaryDer,
     {
-      name: "RSA-OAEP",
-      hash: { name: "SHA-512" },
+      name: RSA_CONFIG.name,
+      hash: RSA_CONFIG.hash,
     },
     true,
     [isPrivate ? "decrypt" : "encrypt"]
@@ -81,11 +86,11 @@ async function getCryptoPublicKey() {
 export const generateRSAKey = async () => {
   const keyPair = await window.crypto.subtle.generateKey(
     {
-      name: "RSA-OAEP",
+      name: RSA_CONFIG.name,
       // Consider using a 4096-bit key for systems that require long-term security
       modulusLength: 2048,
       publicExponent: new Uint8Array([1, 0, 1]),
-      hash: { name: "SHA-512" },
+      hash: RSA_CONFIG.hash,
     },
     true,
     ["encrypt", "decrypt"]
@@ -108,7 +113,7 @@ export const encrypt = async (data: any) => {
   if (publicKey !== null) {
     const buffer = await window.crypto.subtle.encrypt(
       {
-        name: "RSA-OAEP",
+        name: RSA_CONFIG.name,
       },
       publicKey,
       str2ab(JSON.stringify(data))
@@ -131,7 +136,7 @@ export const decrypt = async (text: string) => {
   if (privateKey !== null) {
     const buffer = await window.crypto.subtle.decrypt(
       {
-        name: "RSA-OAEP",
+        name: RSA_CONFIG.name,
       },
       privateKey,
       str2ab(window.atob(text))
