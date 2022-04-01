@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <script type="module">
+        // import { generateRSAKey, encrypt } from '../dist/RSAUtils.js'
+        // const startTime = Date.now()
+        // await generateRSAKey().then(res => {
+        //     console.log(`密钥生成耗时: ${Date.now() - startTime}ms`)
+        //     console.log(res.PRIVATE_KEY, res.PUBLIC_KEY)
+        // })
+    </script>
+    <script type="module">
+        import { encrypt, decrypt } from '../dist/RSA.js'
+        const test = async () => {
+            let result = await encrypt('1111')
+            console.log(result)
+            let res = await decrypt(result)
+            console.log(res)
+        }
+        setTimeout(() => {
+            test()
+        }, 1000)
+    </script>
+</body>
+
+</html>

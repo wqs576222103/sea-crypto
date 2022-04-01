@@ -12,10 +12,7 @@
   ],
   "author": "wangqs",
   "license": "ISC",
-  "dependencies": {
-    "crypto-js": "^4.1.1",
-    "js-crypto-rsa": "^1.0.4"
-  },
+  "dependencies": {},
   "devDependencies": {
     "chai": "^4.3.6",
     "mocha": "^9.2.2",
