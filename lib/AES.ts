@@ -53,14 +53,16 @@ export const generateAESKey = async () => {
     ["encrypt", "decrypt"]
   );
   return cryptoKey2Base64Key(key);
+  // const rawKey = window.crypto.getRandomValues(new Uint8Array(16));
+  // return ab2base64Str(rawKey)
 };
 
-export const encrypt = async (key: string, data: any = "") => {
+export const AESEncrypt = async (key: any, data: any = "", iv: string) => {
   const privateKey = await base64Key2CryptoKey(key);
   const buffer = await window.crypto.subtle.encrypt(
     {
       name: AES_CONFIG.name,
-      counter: base64Str2ab(AES_CONFIG.iv),
+      counter: base64Str2ab(iv),
       length: AES_CONFIG.length,
     },
     privateKey,
@@ -69,12 +71,12 @@ export const encrypt = async (key: string, data: any = "") => {
   return ab2base64Str(buffer);
 };
 
-export const decrypt = async (key: string, text: string) => {
+export const AESDecrypt = async (key: string, text: string, iv: string) => {
   const publicKey = await base64Key2CryptoKey(key);
   const buffer = await window.crypto.subtle.decrypt(
     {
       name: AES_CONFIG.name,
-      counter: base64Str2ab(AES_CONFIG.iv),
+      counter: base64Str2ab(iv),
       length: AES_CONFIG.length,
     },
     publicKey,

@@ -12,18 +12,18 @@
 <body>
 
     <script type="module">
-        import { generateAESKey, encrypt, decrypt } from '../dist/AES.js'
-        const test = async () => {
-            const key = await generateAESKey()
-            console.log(key)
-            let result = await encrypt(key, '1111')
-            console.log(result)
-            let res = await decrypt(key, result)
-            console.log(res)
-        }
-        setTimeout(() => {
-            test()
-        }, 1000)
+        // import {generateAESKey, AEESAESEncrypt, AESDecrypt } from '../dist/AES.js'
+        // const test = async () => {
+        //     const key = await generateAESKey()
+        //     console.log(key)
+        //     let result = await AESEncrypt(key,'1111' )
+        //     console.log(result)
+        //     let res = await AESDecrypt(result, key)
+        //     console.log(res)
+        // }
+        // setTimeout(() => {
+        //     test()
+        // }, 1000)
     </script>
 </body>
 
