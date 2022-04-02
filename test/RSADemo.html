@@ -27,9 +27,9 @@
             generateRSASign
         } from '../dist/RSA.js'
         const test = async () => {
-            // let result = await RSAEncrypt(clientRSAKeyPair.PUBLIC_KEY, '123')
-            // console.log(result)
-            let res = await RSADecrypt(clientRSAKeyPair.PRIVATE_KEY, 'XjRG9PjV+XhMIpS/2JMYDAl26mr/UhgNQyzuRpeTwhaCfW5OT4qFYMFcYYuYZ7q6M04117c3uUuMorIPkdiDNHCar82KMtjwUAXNfh1BM/35jTiNg/PsChiJ55GuLjp3w/i+oTstfdWMnhXATOFe5NtL2IAJuouPHQkIlU2iCTgp5vtXDajnLScNJdUckIemiMqXQV8NCOh3dBVjPdKwRGdI++/AEQELxDthSxMsCI4oDiB2s9TqOpSXvVk8fo64fUbglugwKhsQnj1wy0iBraguLthi2Hq/1IHgHNTz7eLJOk4lFrU6LOkFKYjoYW49TgvQlW36Hd1RUfwsbAcXEg==XjRG9PjV+XhMIpS/2JMYDAl26mr/UhgNQyzuRpeTwhaCfW5OT4qFYMFcYYuYZ7q6M04117c3uUuMorIPkdiDNHCar82KMtjwUAXNfh1BM/35jTiNg/PsChiJ55GuLjp3w/i+oTstfdWMnhXATOFe5NtL2IAJuouPHQkIlU2iCTgp5vtXDajnLScNJdUckIemiMqXQV8NCOh3dBVjPdKwRGdI++/AEQELxDthSxMsCI4oDiB2s9TqOpSXvVk8fo64fUbglugwKhsQnj1wy0iBraguLthi2Hq/1IHgHNTz7eLJOk4lFrU6LOkFKYjoYW49TgvQlW36Hd1RUfwsbAcXEg==')
+            let result = await RSAEncrypt(clientRSAKeyPair.PUBLIC_KEY, '123')
+            console.log(result)
+            let res = await RSADecrypt(clientRSAKeyPair.PRIVATE_KEY, result)
             console.log(res)
         }
         setTimeout(() => {

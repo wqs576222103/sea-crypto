@@ -168,7 +168,7 @@ export const RSADecrypt = async (privateKey: string, text: string) => {
         name: RSA_CONFIG.name,
       },
       bufferKey,
-      str2ab(window.atob(text))
+      base64Str2ab(text)
     );
     return ab2str(buffer);
   }
