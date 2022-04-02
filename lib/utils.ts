@@ -30,3 +30,23 @@ export function base64Str2ab(str: string) {
   // convert from a binary string to an ArrayBuffer
   return str2ab(binaryDerString);
 }
+// 合并多个ArrayBuffer
+export const abConcatenate =(...arrays: ArrayBuffer[]) => {
+  let totalLen = 0;
+
+  for (let arr of arrays) totalLen += arr.byteLength;
+
+  let res = new Uint8Array(totalLen);
+
+  let offset = 0;
+
+  for (let arr of arrays) {
+    let uint8Arr = new Uint8Array(arr);
+
+    res.set(uint8Arr, offset);
+
+    offset += arr.byteLength;
+  }
+
+  return res.buffer;
+}

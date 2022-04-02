@@ -1,81 +1,86 @@
-import { base64Str2ab, str2ab } from "./utils.js";
+// TODO why is js
+import { base64Str2ab, ab2base64Str, str2ab, ab2str } from "./utils.js";
 
 const AES_CONFIG = {
   name: "AES-CTR",
-  iv: "TjBU0kAoEV5wx2n+JaRIPg==",
+  iv: "TjBU0kAoEV5wx2n+JaRIPg==", // TODO 改为随机
   length: 128,
 };
 
 /*
  CryptoKey转base64(pem)格式
  */
-// async function cryptoKey2Base64Key(key: CryptoKey, isPrivate: boolean) {
-//   try {
-//     const exported = await window.crypto.subtle.exportKey(
-//       isPrivate ? "pkcs8" : "spki",
-//       key
-//     );
-//     const exportedAsBase64 = ab2base64Str(exported);
-//     const keyType = isPrivate ? "PRIVATE" : "PUBLIC";
-//     const pemExported = `-----BEGIN ${keyType} KEY-----\n${exportedAsBase64
-//       .replace(/[^\x00-\xff]/g, "$&\x01")
-//       .replace(/.{64}\x01?/g, "$&\n")}\n-----END ${keyType} KEY-----`;
-//     return pemExported;
-//   } catch (error) {
-//     console.log(error);
-//   }
-//   return null;
-// }
+async function cryptoKey2Base64Key(key: CryptoKey) {
+  try {
+    const exported = await window.crypto.subtle.exportKey("raw", key);
+    const exportedAsBase64 = ab2base64Str(exported);
+    const pemExported = `${exportedAsBase64
+      .replace(/[^\x00-\xff]/g, "$&\x01")
+      .replace(/.{64}\x01?/g, "$&\n")}`;
+    return pemExported;
+  } catch (error) {
+    console.log(error);
+  }
+  return null;
+}
 
 /*
  base64(pem)格式转CryptoKey
  */
-function base64Key2CryptoKey(pem: string, isPrivate: boolean) {
-  // fetch the part of the PEM string between header and footer
-  const keyType = isPrivate ? "PRIVATE" : "PUBLIC";
-  const pemHeader = `-----BEGIN ${keyType} KEY-----\n`;
-  const pemFooter = `\n-----END ${keyType} KEY-----`;
-  const pemContents = pem.substring(
-    pemHeader.length,
-    pem.length - pemFooter.length
-  );
+function base64Key2CryptoKey(pem: string) {
   // convert from a binary string to an ArrayBuffer
-  const binaryDer = base64Str2ab(pemContents);
+  const binaryDer = base64Str2ab(pem);
 
   return window.crypto.subtle.importKey(
-    isPrivate ? "pkcs8" : "spki",
+    "raw",
     binaryDer,
-    {
-      name: "RSA-OAEP",
-      hash: { name: "SHA-512" },
-    },
+    AES_CONFIG.name,
     true,
-    [isPrivate ? "decrypt" : "encrypt"]
+    ["encrypt", "decrypt"]
   );
 }
 
-export const encrypt = async (key: string, data: any = "") => {
-  const privateKey = await base64Key2CryptoKey(key, false);
-  return window.crypto.subtle.encrypt(
+/*
+ 自定义生成密钥对
+ */
+export const generateAESKey = async () => {
+  let key = await window.crypto.subtle.generateKey(
     {
       name: AES_CONFIG.name,
-      counter: str2ab(AES_CONFIG.iv),
+      length: AES_CONFIG.length,
+    },
+    true,
+    ["encrypt", "decrypt"]
+  );
+  return cryptoKey2Base64Key(key);
+  // const rawKey = window.crypto.getRandomValues(new Uint8Array(16));
+  // return ab2base64Str(rawKey)
+};
+
+export const AESEncrypt = async (key: any, data: any = "", iv: string) => {
+  const privateKey = await base64Key2CryptoKey(key);
+  const buffer = await window.crypto.subtle.encrypt(
+    {
+      name: AES_CONFIG.name,
+      counter: base64Str2ab(iv),
       length: AES_CONFIG.length,
     },
     privateKey,
-    data
+    str2ab(JSON.stringify(data))
   );
+  return ab2base64Str(buffer);
 };
 
-export const decrypt = async (key: string, ciphertext: string) => {
-  const publicKey = await base64Key2CryptoKey(key, true);
-  return window.crypto.subtle.decrypt(
+export const AESDecrypt = async (key: string, text: string, iv: string) => {
+  const publicKey = await base64Key2CryptoKey(key);
+  const buffer = await window.crypto.subtle.decrypt(
     {
       name: AES_CONFIG.name,
-      counter: str2ab(AES_CONFIG.iv),
+      counter: base64Str2ab(iv),
       length: AES_CONFIG.length,
     },
     publicKey,
-    str2ab(ciphertext)
+    str2ab(window.atob(text))
   );
+  return ab2str(buffer);
 };

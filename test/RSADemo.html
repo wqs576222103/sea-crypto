@@ -11,25 +11,26 @@
 
 <body>
     <script type="module">
-        // import { generateRSAKey, encrypt } from '../dist/RSAUtils.js'
-        // const startTime = Date.now()
-        // await generateRSAKey().then(res => {
-        //     console.log(`密钥生成耗时: ${Date.now() - startTime}ms`)
-        //     console.log(res.PRIVATE_KEY, res.PUBLIC_KEY)
-        // })
+        import { generateRSAKey } from '../dist/RSA.js'
+        const startTime = Date.now()
+        await generateRSAKey().then(res => {
+            
+            console.log(`密钥生成耗时: ${Date.now() - startTime}ms`)
+            console.log(res.PRIVATE_KEY, res.PUBLIC_KEY)
+        })
     </script>
-    <script type="module">
-        import { encrypt, decrypt } from '../dist/RSA.js'
+    <!-- <script type="module">
+        import { encrypt, RSAEncrypt } from '../dist/RSA.js'
         const test = async () => {
             let result = await encrypt('1111')
             console.log(result)
-            let res = await decrypt(result)
+            let res = await RSAEncrypt(result)
             console.log(res)
         }
         setTimeout(() => {
             test()
         }, 1000)
-    </script>
+    </script> -->
 </body>
 
 </html>
