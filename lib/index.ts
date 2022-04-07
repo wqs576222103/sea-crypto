@@ -3,10 +3,10 @@ import { AESEncrypt, AESDecrypt, generateAESKey } from "./AES.js";
 // @ts-ignore
 import {
   RSAEncrypt,
-  // RSADecrypt,
-  // clientRSAKeyPair,
+  clientRSAKeyPair,
   serverRSAKeyPair,
   generateRSASign,
+  RSADecrypt,
 } from "./RSA.js";
 import {
   str2ab,
@@ -14,6 +14,7 @@ import {
   ab2base64Str,
   base64Str2ab,
   number2ab,
+  ab2str,
 } from "./utils.js";
 
 export const encrypt = async (data: string) => {
@@ -30,7 +31,7 @@ export const encrypt = async (data: string) => {
     str2ab(data)
   );
 
-  // 生成AESKey
+  // 生成会话密钥AESKey
   const AESKey = (await generateAESKey()) || "";
   // const AESKey = 'dFvRuiiKY+srZbgVbU/JFg=='
   // console.log("AESKey", AESKey);
@@ -40,12 +41,11 @@ export const encrypt = async (data: string) => {
   // 加密数据
   let encrypt = await AESEncrypt(AESKey, hybridBuffer, nonce);
   // console.log("encrypt", encrypt);
-  // 组合 Nonce、加密数据、用公钥加密的AESKey
-
+  // 用公钥加密的AESKey
   const encryptAESKey =
     (await RSAEncrypt(serverRSAKeyPair.PUBLIC_KEY, base64Str2ab(AESKey))) || "";
   // console.log('encryptAESKey', encryptAESKey)
-
+  // 组合 Nonce、加密会话密钥、加密数据
   const result = abConcatenate(
     base64Str2ab(nonce),
     base64Str2ab(encryptAESKey),
@@ -55,4 +55,35 @@ export const encrypt = async (data: string) => {
   return ab2base64Str(result);
 };
 
-export const decrypt = (text: string) => {};
+export const decrypt = async (text: string) => {
+  debugger
+  // base64转字节码
+  const result = base64Str2ab(text);
+  // 截取nonce
+  const nonce = result.slice(0, 16);
+  // 截取用公钥加密的AESKey
+  const encryptAESKey = result.slice(16, 16 + 256);
+  // 截取加密后的组合数据
+  const encrypt = result.slice(16 + 256);
+
+  // 获取AESKey
+  const AESKey = await RSADecrypt(
+    clientRSAKeyPair.PRIVATE_KEY || "",
+    encryptAESKey
+  );
+
+  // 获取解密后的组合数据
+  const hybridBuffer = await AESDecrypt(
+    ab2base64Str(AESKey),
+    ab2base64Str(encrypt),
+    ab2base64Str(nonce)
+  );
+
+  // // 截取时间戳
+  // const timestemp = hybridBuffer.slice(0, 8)
+  // // 截取签名
+  // const sign = hybridBuffer.slice(8, 8 +256)
+  // 截取消息体
+  const data = hybridBuffer.slice(8 + 256);
+  return ab2str(data);
+};

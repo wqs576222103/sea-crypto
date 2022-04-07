@@ -13,8 +13,10 @@
 
     <script type="module">
         import { encrypt, decrypt } from '../dist/index.js'
-        let data = { "username": "a", "email": "b" }
-        encrypt(JSON.stringify(data)).then(res => console.log(res))
+        // let data = { "username": "a", "email": "b" }
+        // encrypt(JSON.stringify(data)).then(res => console.log(res))
+        const str = `zvu2/JYOVHWyvWiwhJJdZDv1198bLmUD4uBs0aURaw/Ef1tOTi9OSJQrzmIMklNbe6JwivOWNaIUmr7x+ZnJwQSL/rqEetZat47YvuxpsAAFTmgyuh4UjmTIQ9FOp5dHTZc+GlD9Zh+Ncr3rAF1i8NHrWz227B1ngx6GUoEakFxmVfm2FJ/MkxAD2PkwmFW4dvg0ggCpACHKYM/CQzt/XqFOD4ujtXypriGBAkxwNdaNbV2J1oZPNyKt4XI0kLX97ck3F/dqZ5gNxD8Ru0F9vRR9odqVYj4dw5B3T16Dop51LFwwBAbMB0FwxanXFc5YCg7KU/hgFk7NOcpt+shOCGbqZhmYJgqYQrGP3y9B0NNMHXykAAbJAse6lk7x4oJ9n9seCKWwL4lb/9eMfMqHB9MRihAckJFEy0SqcpjNiaCRfq1Vcc2KYmuPsTtlAvjkbznGCorKvercfjSSpfpeyJj4wpPZHSSM0N/ecr95V++CwDWtSRVNkujJDtLxUQ7ifMx59TerbfmzD18DbduGHRJOIGkxhPfzzlLlNznXmq/EGH5tmak4cKseACA2HL0Fi93uVSF5szZ2+y2JK4yllXwgYTR4zE+ew34XcyNwsyZclqrPdwNBSOVuyakG/gakkHH99P0sSvlhThsAJSDcxKawnJwcgl8a+soBGotHA9ztJHyNZ9e4cz2P7W/gYRq2LCoCfT9dmU2YhLipRI+ZQ7r+S8VZ1H/SCBmdMuJrnDKljWot9tVjssYZzxY4jA5/s/UbxlI4`
+        decrypt(str).then(res => console.log(res))
     </script>
 </body>
 

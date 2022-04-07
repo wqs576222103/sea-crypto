@@ -1,5 +1,5 @@
 // TODO why is js
-import { base64Str2ab, ab2base64Str, str2ab, ab2str } from "./utils.js";
+import { base64Str2ab, ab2base64Str } from "./utils.js";
 
 const AES_CONFIG = {
   name: "AES-CTR",
@@ -80,7 +80,7 @@ export const AESDecrypt = async (key: string, text: string, iv: string) => {
       length: AES_CONFIG.length,
     },
     publicKey,
-    str2ab(window.atob(text))
+    base64Str2ab(text)
   );
-  return ab2str(buffer);
+  return buffer;
 };

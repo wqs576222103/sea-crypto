@@ -1,4 +1,4 @@
-import { ab2base64Str, base64Str2ab, str2ab, ab2str } from "./utils.js";
+import { ab2base64Str, base64Str2ab, str2ab } from "./utils.js";
 
 const RSA_CONFIG = {
   name: "RSA-OAEP",
@@ -111,7 +111,6 @@ export const generateRSASign = async (data: string) => {
     true,
     ["sign"]
   );
-  // const digestbuffer = await crypto.subtle.digest('SHA-256', str2ab(JSON.stringify(data)));
   if (privateKey !== null) {
     let buffer = await window.crypto.subtle.sign(
       "RSASSA-PKCS1-v1_5",
@@ -159,7 +158,7 @@ export const RSAEncrypt = async (publicKey: string, data: ArrayBuffer, ) => {
 /*
  解密
  */
-export const RSADecrypt = async (privateKey: string, text: string) => {
+export const RSADecrypt = async (privateKey: string, textAb: ArrayBuffer) => {
   const bufferKey = await base64Key2CryptoKey(privateKey, true);
  
   if (privateKey !== null) {
@@ -168,9 +167,9 @@ export const RSADecrypt = async (privateKey: string, text: string) => {
         name: RSA_CONFIG.name,
       },
       bufferKey,
-      base64Str2ab(text)
+      textAb
     );
-    return ab2str(buffer);
+    return buffer;
   }
-  return "";
+  return new ArrayBuffer(0);
 };
