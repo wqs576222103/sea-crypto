@@ -56,7 +56,7 @@ export const encrypt = async (data: string) => {
 };
 
 export const decrypt = async (text: string) => {
-  debugger
+  
   // base64转字节码
   const result = base64Str2ab(text);
   // 截取nonce
@@ -79,7 +79,7 @@ export const decrypt = async (text: string) => {
     ab2base64Str(nonce)
   );
 
-  // // 截取时间戳
+  // // 截取时间戳 五分钟校验
   // const timestemp = hybridBuffer.slice(0, 8)
   // // 截取签名
   // const sign = hybridBuffer.slice(8, 8 +256)
