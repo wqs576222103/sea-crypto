@@ -12,18 +12,22 @@
 <body>
 
     <script type="module">
-        // import {generateAESKey, AEESAESEncrypt, AESDecrypt } from '../dist/AES.js'
-        // const test = async () => {
-        //     const key = await generateAESKey()
-        //     console.log(key)
-        //     let result = await AESEncrypt(key,'1111' )
-        //     console.log(result)
-        //     let res = await AESDecrypt(result, key)
-        //     console.log(res)
-        // }
-        // setTimeout(() => {
-        //     test()
-        // }, 1000)
+        import { generateAESKey, AESEncrypt, AESDecrypt } from '../dist/AES.js'
+        import { ab2base64Str } from '../dist/utils.js'
+        const test = async () => {
+            const key = await generateAESKey()
+            console.log(key)
+            // 生成Nonce
+            // const nonce = ab2base64Str(window.crypto.getRandomValues(new Uint8Array(16)));
+            const nonce = 'TjBU0kAoEV5wx2n+JaRIPg=='
+            let result = await AESEncrypt(key, '1111', nonce)
+            console.log(result)
+            let res = await AESDecrypt(key, result, nonce)
+            console.log(res)
+        }
+        setTimeout(() => {
+            test()
+        }, 1000)
     </script>
 </body>
 

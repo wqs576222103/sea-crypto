@@ -19,27 +19,30 @@
             console.log(res.PRIVATE_KEY, res.PUBLIC_KEY)
         })
     </script> -->
-    <script type="module">
+    <!-- <script type="module">
         import {
             RSAEncrypt, RSADecrypt,
             clientRSAKeyPair,
             serverRSAKeyPair,
             generateRSASign
         } from '../dist/RSA.js'
+        import {
+            str2ab
+        } from '../dist/utils.js'
         const test = async () => {
-            let result = await RSAEncrypt(clientRSAKeyPair.PUBLIC_KEY, '123')
-            console.log(result)
-            let res = await RSADecrypt(clientRSAKeyPair.PRIVATE_KEY, result)
+            // let result = await RSAEncrypt(clientRSAKeyPair.PUBLIC_KEY, str2ab('123'))
+            // console.log(result)
+            let res = await RSADecrypt(clientRSAKeyPair.PRIVATE_KEY, 'GO+iJIptwQfPoh2smlQwrX1q/IXfrI3bqtR2T1UfbCwU8uNZVqTFPkkRV/8ja/T3FOcBqvIDVQHlxKWqJ0M7qeBzpfpFbe8nysYw7aHuPYRMbTTAVc9fgxZcDGwXdFRpTjg2kb2kaiIBOUQ31fmn4fEmNMLxFXfncToAh7c4Ab9cRCDHp9HhQ+6Hqql5CNCWcwL1pYrFGZl3K2wFMub1geo87a8fxrPEs9wVm8qRpx7+in2eYz+/MFDvJkYU7Yo7XcbpKRScYb8zqTQfMBFLW1w1wLBiXBGO0BWfJxQ6e3mTZe48QSDUlkO3+6PNG7cFQbGceFXjJWX8uWou4laCMQ==')
             console.log(res)
         }
         setTimeout(() => {
             test()
         }, 1000)
-    </script>
-    <!-- <script type="module">
+    </script> -->
+    <script type="module">
         import { verifySign, generateRSASign } from '../dist/RSA.js'
         const test = async () => {
-            let data = '122333'
+            let data = 'hello world'
             let sign = await generateRSASign(data)
             console.log(sign)
             let res = await verifySign(sign, data)
@@ -48,7 +51,7 @@
         setTimeout(() => {
             test()
         }, 1000)
-    </script> -->
+    </script>
 </body>
 
 </html>

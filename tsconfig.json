@@ -6,7 +6,7 @@
     "declaration": true, // 生成 `.d.ts` 文件
     "outDir": "./dist", // 编译后生成的文件目录
     "strict": true, // 开启严格的类型检测
-    "lib": ["es2016", "dom"],
+    "lib": ["es2020", "dom"],
     "sourceMap": true,
     "baseUrl": ".",
     "jsx": "react",

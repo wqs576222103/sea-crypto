@@ -30,8 +30,20 @@ export function base64Str2ab(str: string) {
   // convert from a binary string to an ArrayBuffer
   return str2ab(binaryDerString);
 }
+
+export const number2ab = (n: number) => {
+  // 大端模式转小端模式
+  const buf = new BigUint64Array([BigInt(n)]).buffer;
+  return buf;
+};
+
+export const ab2number = (buf: ArrayBuffer) => {
+  const bufView = new BigUint64Array(buf);
+  return Number(bufView[0]);
+};
+
 // 合并多个ArrayBuffer
-export const abConcatenate =(...arrays: ArrayBuffer[]) => {
+export const abConcatenate = (...arrays: ArrayBuffer[]) => {
   let totalLen = 0;
 
   for (let arr of arrays) totalLen += arr.byteLength;
@@ -49,4 +61,4 @@ export const abConcatenate =(...arrays: ArrayBuffer[]) => {
   }
 
   return res.buffer;
-}
+};

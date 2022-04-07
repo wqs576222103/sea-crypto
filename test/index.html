@@ -13,8 +13,8 @@
 
     <script type="module">
         import { encrypt, decrypt } from '../dist/index.js'
-        let data = '122333'
-        encrypt(data).then(res => console.log(res))
+        let data = { "username": "a", "email": "b" }
+        encrypt(JSON.stringify(data)).then(res => console.log(res))
     </script>
 </body>
 
