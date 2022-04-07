@@ -1,9 +1,9 @@
 // TODO why is js
-import { base64Str2ab, ab2base64Str, str2ab, ab2str } from "./utils.js";
+import { base64Str2ab, ab2base64Str } from "./utils.js";
 
 const AES_CONFIG = {
   name: "AES-CTR",
-  iv: "TjBU0kAoEV5wx2n+JaRIPg==", // TODO 改为随机
+  // iv: "TjBU0kAoEV5wx2n+JaRIPg==", // 改为随机
   length: 128,
 };
 
@@ -57,7 +57,7 @@ export const generateAESKey = async () => {
   // return ab2base64Str(rawKey)
 };
 
-export const AESEncrypt = async (key: any, data: any = "", iv: string) => {
+export const AESEncrypt = async (key: any, data:  ArrayBuffer, iv: string) => {
   const privateKey = await base64Key2CryptoKey(key);
   const buffer = await window.crypto.subtle.encrypt(
     {
@@ -66,7 +66,7 @@ export const AESEncrypt = async (key: any, data: any = "", iv: string) => {
       length: AES_CONFIG.length,
     },
     privateKey,
-    str2ab(JSON.stringify(data))
+    data
   );
   return ab2base64Str(buffer);
 };
@@ -80,7 +80,7 @@ export const AESDecrypt = async (key: string, text: string, iv: string) => {
       length: AES_CONFIG.length,
     },
     publicKey,
-    str2ab(window.atob(text))
+    base64Str2ab(text)
   );
-  return ab2str(buffer);
+  return buffer;
 };
