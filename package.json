@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "mocha --reporter spec",
+    "test": "echo \" -------run test---------- \"",
     "release": "np --no-yarn --no-2fa --branch main"
   },
   "keywords": [
