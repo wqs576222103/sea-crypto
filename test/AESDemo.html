@@ -13,17 +13,17 @@
 
     <script type="module">
         import { generateAESKey, AESEncrypt, AESDecrypt } from '../dist/AES.js'
-        import { ab2base64Str, base64Str2ab } from '../dist/utils.js'
+        import { ab2base64Str, base64Str2ab, ab2str } from '../dist/utils.js'
         const test = async () => {
             const key = await generateAESKey()
             console.log(key)
             // 生成Nonce
             // const nonce = ab2base64Str(window.crypto.getRandomValues(new Uint8Array(16)));
             const nonce = 'TjBU0kAoEV5wx2n+JaRIPg=='
-            let result = await AESEncrypt(key, base64Str2ab('1111'), nonce)
+            let result = await AESEncrypt(key, base64Str2ab('11'), nonce)
             console.log(result)
-            let res = await AESDecrypt(key, result, nonce)
-            console.log(ab2base64Str(res))
+            let res = await AESDecrypt(base64Str2ab(key), base64Str2ab(result), base64Str2ab(nonce))
+            console.log(res)
         }
         setTimeout(() => {
             test()
