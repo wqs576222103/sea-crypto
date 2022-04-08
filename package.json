@@ -1,8 +1,8 @@
 {
-  "name": "encrypt-utils",
+  "name": "@wyny/crypto",
   "version": "1.0.0",
   "description": "aes+rsa加解密工具",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "test": "mocha --reporter spec"
@@ -10,6 +10,7 @@
   "keywords": [
     "typescript"
   ],
+  "type": "module",
   "author": "wangqs",
   "license": "ISC",
   "dependencies": {},
