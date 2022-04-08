@@ -161,7 +161,7 @@ export const RSAEncrypt = async (publicKey: string, data: ArrayBuffer, ) => {
 export const RSADecrypt = async (privateKey: string, textAb: ArrayBuffer) => {
   const bufferKey = await base64Key2CryptoKey(privateKey, true);
  
-  if (privateKey !== null) {
+  if (bufferKey !== null) {
     const buffer = await window.crypto.subtle.decrypt(
       {
         name: RSA_CONFIG.name,
