@@ -2,33 +2,43 @@
 Convert  an ArrayBuffer into a string
 from https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
 */
-export function ab2str(buf: ArrayBuffer) {
-  const bytes = new Uint8Array(buf);
-  return String.fromCharCode.apply(null, Array.from(bytes));
+export function ab2str(uintArray: ArrayBuffer) {
+  var encodedString = String.fromCharCode.apply(null, Array.from(new Uint8Array(uintArray))),
+    decodedString = decodeURIComponent(encodedString);
+  return decodedString;
 }
 /*
-  Convert a string into an ArrayBuffer
-  from https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
-  */
-export function str2ab(str: string) {
-  const buf = new ArrayBuffer(str.length);
-  const bufView = new Uint8Array(buf);
-  for (let i = 0, strLen = str.length; i < strLen; i++) {
-    bufView[i] = str.charCodeAt(i);
+Convert a string into an ArrayBuffer
+from https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
+*/
+export function str2ab(string: string) {
+  const str = encodeURIComponent(string),
+    charList = str.split(""),
+    uintArray = [];
+  for (let i = 0; i < charList.length; i++) {
+    uintArray.push(charList[i].charCodeAt(0));
   }
-  return buf;
+  return new Uint8Array(uintArray);
 }
 /** ArrayBuffer转base64 */
-export function ab2base64Str(buf: ArrayBuffer) {
-  const exportedAsString = ab2str(buf);
-  return window.btoa(exportedAsString);
+export function ab2base64Str(buffer: ArrayBuffer) {
+  var binary = "";
+  var bytes = new Uint8Array(buffer);
+  var len = bytes.byteLength;
+  for (var i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return window.btoa(binary);
 }
 /** base64转ArrayBuffer */
-export function base64Str2ab(str: string) {
-  // base64 decode the string to get the binary data
-  const binaryDerString = window.atob(str);
-  // convert from a binary string to an ArrayBuffer
-  return str2ab(binaryDerString);
+export function base64Str2ab(base64String: string) {
+  const rawData = window.atob(base64String);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
 }
 
 export const number2ab = (n: number) => {

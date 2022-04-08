@@ -13,7 +13,7 @@
 
     <script type="module">
         import { encrypt, decrypt } from '../dist/index.js'
-        let data = { "username": "a", "email": "111" }
+        let data = { "username": "a", "email": "湿时说" }
         const encryptData = await encrypt(JSON.stringify(data))
         console.log('加密数据：', encryptData)
         const decryptData = await decrypt(encryptData)
