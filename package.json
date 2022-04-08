@@ -5,11 +5,15 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec",
+    "release": "np --no-yarn --no-2fa --branch main"
   },
   "keywords": [
     "typescript"
   ],
+  "publishConfig": {
+    "registry": "http://172.16.11.82:4873/"
+  },
   "type": "module",
   "author": "wangqs",
   "license": "ISC",
