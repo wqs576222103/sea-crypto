@@ -5,6 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "cp": "cp -r ./dist ./viewKit/",
+    "preview": "yarn build && yarn cp",
     "test": "echo \" -------run test---------- \"",
     "release": "np --no-yarn --no-2fa --branch main"
   },

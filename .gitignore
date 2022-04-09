@@ -18,3 +18,5 @@
 # linting
 .eslintcache
 
+/viewKit/dist
+
