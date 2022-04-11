@@ -11,6 +11,21 @@
         .text-wrap label {
             vertical-align: top;
         }
+
+        .flex1 {
+            display: flex;
+            align-items: center;
+        }
+
+        .text-wrap textarea {
+            width: 100%;
+        }
+
+        .flex1 div:nth-child(2) {
+            text-align: center;
+            vertical-align: middle;
+            margin: 0 20px;
+        }
     </style>
 
 </head>
@@ -18,30 +33,40 @@
 <body>
     <div>
         <h1>加解密</h1>
+        <div class="flex1">
+            <div class="text-wrap">
+                <p for="decryptData">加密前数据：</p>
+                <textarea id="decryptData" cols="90" rows="20"></textarea>
+            </div>
+            <div>
+                <div>
+                    <button id="encryptButton">加密&rarr;
+                </div>
+                <br />
+                <div>
+                    <button id="decryptButton">&larr; 解密</button>
+                </div>
+            </div>
+            <div class="text-wrap">
+                <p for="encryptData">加密后数据：</p>
+                <textarea id="encryptData" cols="90" rows="20"></textarea>
+            </div>
+        </div>
+
         <br />
-        <div class="text-wrap">
-            <label for="decryptData">加密前数据：</label>
-            <textarea id="decryptData" cols="100" rows="10"></textarea>
-        </div>
-        <div class="text-wrap">
-            <label for="encryptData">加密后数据：</label>
-            <textarea id="encryptData" cols="100" rows="10"></textarea>
-        </div>
 
-
-        <div style="margin-top: 20px;">
-            <button id="encryptButton">加密</button>
-            <button id="decryptButton">解密</button>
-        </div>
         <hr />
         <h1>图片回显</h1>
-        <br />
-        <div class="text-wrap">
-            <label for="encryptImgData">加密后数据：</label>
-            <textarea id="encryptImgData" cols="100" rows="10"></textarea>
+        <div class="flex1">
+            <div class="text-wrap">
+                <p for="encryptImgData">加密后数据：</p>
+                <textarea id="encryptImgData" cols="90" rows="20"></textarea>
+            </div>
+            <div>
+                <button id="decryptImgButton">回显图片</button>
+            </div>
+            <div><img id="decryptImg" width="600" src="" alt="回显图片"></div>
         </div>
-        <button id="decryptImgButton">回显图片</button>
-        <div><img id="decryptImg" width="900" src="" alt="解密图片"></div>
     </div>
 
     <script type="module">
@@ -74,6 +99,7 @@
                 const decryptData = await decrypt(encryptText)
                 document.querySelector('#decryptData').value = decryptData
             } catch (error) {
+                console.log(error)
                 alert('解密失败')
             }
 
@@ -94,11 +120,12 @@
                     showImg(res.data)
                 }
             } catch (error) {
+                console.log(error)
                 alert('解密失败')
             }
 
         })
-        
+
 
     </script>
 </body>
