@@ -1,5 +1,5 @@
 // @ts-ignore
-import { AESEncrypt, AESDecrypt, generateAESKey } from "./AES.js";
+import { AESEncrypt, AESDecrypt, generateAESKey } from "./AES.ts";
 // @ts-ignore
 import {
   RSAEncrypt,

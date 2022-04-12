@@ -2,6 +2,24 @@
 
 [![Build Status](https://app.travis-ci.com/wqs576222103/encrypt-utils.svg?token=T85MtSayTDJVsGq9odzs&branch=main)](https://app.travis-ci.com/wqs576222103/encrypt-utils)
 
+# 本项目常用命令
+```
+// 构建工具包
+yarn build
+
+// 使用vite启动
+yarn start
+
+// 容器预览
+yarn preview
+
+// 测试工具类
+yarn test
+
+```
+
+
+# 二、工具类引入
 # 添加依赖
 
 ```
