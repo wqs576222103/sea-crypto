@@ -25,10 +25,13 @@
     "cp": "mkdir viewKit && cp -r ./dist ./viewKit/ &&cp -r ./index.html ./viewKit/",
     "preview": "yarn build && yarn cp",
     "test": "jest",
-    "release": "yarn build && np --no-yarn --no-2fa --branch main"
+    "release": "yarn build && np --no-2fa --branch main"
   },
   "publishConfig": {
     "registry": "http://172.16.11.82:4873/"
+  },
+  "np": {
+		"yarn": true
   },
   "dependencies": {
     "vue": "^3.2.31"
