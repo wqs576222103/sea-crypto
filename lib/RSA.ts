@@ -1,4 +1,4 @@
-import { ab2base64Str, base64Str2ab, str2ab } from "./utils.js";
+import { ab2base64Str, base64Str2ab, str2ab } from "./utils.ts";
 
 const RSA_CONFIG = {
   name: "RSA-OAEP",

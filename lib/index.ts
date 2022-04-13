@@ -1,13 +1,13 @@
-// @ts-ignore
-import { AESEncrypt, AESDecrypt, generateAESKey } from "./AES.js";
-// @ts-ignore
+
+import { AESEncrypt, AESDecrypt, generateAESKey } from "./AES.ts";
+
 import {
   RSAEncrypt,
   clientRSAKeyPair,
   serverRSAKeyPair,
   generateRSASign,
   RSADecrypt,
-} from "./RSA.js";
+} from "./RSA.ts";
 import {
   str2ab,
   abConcatenate,
@@ -15,9 +15,9 @@ import {
   base64Str2ab,
   number2ab,
   ab2str,
-} from "./utils.js";
+} from "./utils.ts";
 
-export const encrypt = async (data: string) => {
+const encrypt = async (data: string) => {
   // 生成签名
   const sign = (await generateRSASign(data)) || "";
   // console.log("sign", sign);
@@ -55,7 +55,7 @@ export const encrypt = async (data: string) => {
   return ab2base64Str(result);
 };
 
-export const decrypt = async (text: string) => {
+ const decrypt = async (text: string) => {
   
   // base64转字节码
   const result = base64Str2ab(text);
@@ -87,3 +87,5 @@ export const decrypt = async (text: string) => {
   const data = hybridBuffer.slice(8 + 256);
   return ab2str(data);
 };
+
+export {encrypt, decrypt,RSAEncrypt, RSADecrypt, AESEncrypt, AESDecrypt}

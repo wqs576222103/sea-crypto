@@ -2,13 +2,34 @@
 
 [![Build Status](https://app.travis-ci.com/wqs576222103/encrypt-utils.svg?token=T85MtSayTDJVsGq9odzs&branch=main)](https://app.travis-ci.com/wqs576222103/encrypt-utils)
 
-# 添加依赖
+# 项目常用命令
+```
+// 生成工具包
+yarn build
+
+// 本地vite启动
+yarn start
+
+// 容器上预览 预览地址 https://crypto-view.dev.172.16.11.85.nip.io/
+yarn preview
+
+// 运行测试用例
+yarn test
+
+// 发布工具到npm私服库上  http://172.16.11.82:4873/
+yarn release
+
+```
+
+
+# 发布npm包后，项目如何使用
+- 添加依赖
 
 ```
 yarn add @wyny/crypto
 ```
 
-# 使用
+- 使用
 
 ```
     import { encrypt, decrypt } from '@wyny/crypto'
@@ -20,3 +41,10 @@ yarn add @wyny/crypto
     console.log('解密数据：', decryptData)
     ...
 ```
+
+
+# 常见问题
+
+- 控制台报错 TypeError: Cannot read properties of undefined (reading 'importKey')
+
+原因： Web API window.crypto 仅支持在本地（localhost、127.0.0.1、file）、远程（https域名访问）
