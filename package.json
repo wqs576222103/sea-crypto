@@ -1,6 +1,5 @@
 {
   "name": "@wyny/crypto",
-  "private": true,
   "version": "1.0.4",
   "description": "aes+rsa加解密工具",
   "main": "./dist/crypto.umd.js",
