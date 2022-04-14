@@ -31,7 +31,7 @@
     "registry": "http://172.16.11.82:4873/"
   },
   "np": {
-    "yarn": true,
+    "yarn": false,
     "contents": "dist"
   },
   "files": [
