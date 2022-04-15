@@ -1,5 +1,5 @@
 
-import { AESEncrypt, AESDecrypt, generateAESKey } from "./AES.ts";
+import { AESEncrypt, AESDecrypt, generateAESKey } from "./AES";
 
 import {
   RSAEncrypt,
@@ -7,7 +7,7 @@ import {
   serverRSAKeyPair,
   generateRSASign,
   RSADecrypt,
-} from "./RSA.ts";
+} from "./RSA";
 import {
   str2ab,
   abConcatenate,
@@ -15,7 +15,7 @@ import {
   base64Str2ab,
   number2ab,
   ab2str,
-} from "./utils.ts";
+} from "./utils";
 
 const encrypt = async (data: string) => {
   // 生成签名

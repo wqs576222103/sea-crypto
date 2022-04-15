@@ -1,4 +1,4 @@
-import { ab2base64Str, base64Str2ab, str2ab } from "./utils.ts";
+import { ab2base64Str, base64Str2ab, str2ab } from "./utils";
 // 环境变量
 const {VITE_CLIENT_PRIVATE_KEY, VITE_CLIENT_PUBLIC_KEY, VITE_SERVER_PUBLIC_KEY} = import.meta.env
 const RSA_CONFIG = {

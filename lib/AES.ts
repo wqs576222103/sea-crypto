@@ -1,5 +1,5 @@
 // TODO why is js
-import { base64Str2ab, ab2base64Str } from "./utils.ts";
+import { base64Str2ab, ab2base64Str } from "./utils";
 
 const AES_CONFIG = {
   name: "AES-CTR",
