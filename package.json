@@ -19,9 +19,10 @@
     "crypto"
   ],
   "scripts": {
-    "build": "vite build",
-    "start": "yarn build && vite",
-    "cp": "mkdir viewKit && cp -r ./dist ./viewKit/ &&cp -r ./index.html ./viewKit/",
+    "build": "vite build --mode admin",
+    "build:offiaccount": "vite build --mode offiaccount",
+    "start": "vite",
+    "cp": "mkdir -p viewKit && cp -r ./dist/ ./viewKit/ &&cp -r ./index.html ./viewKit/",
     "preview": "yarn build && yarn cp",
     "test": "jest",
     "release": "yarn build && np --no-2fa --branch main --message v%s",
