@@ -1,4 +1,3 @@
-
 import { AESEncrypt, AESDecrypt, generateAESKey } from "./AES";
 
 import {
@@ -7,6 +6,8 @@ import {
   serverRSAKeyPair,
   generateRSASign,
   RSADecrypt,
+  setClientKeyPair,
+  setServerPublicKey,
 } from "./RSA";
 import {
   str2ab,
@@ -55,8 +56,7 @@ const encrypt = async (data: string) => {
   return ab2base64Str(result);
 };
 
- const decrypt = async (text: string) => {
-  
+const decrypt = async (text: string) => {
   // base64转字节码
   const result = base64Str2ab(text);
   // 截取nonce
@@ -88,4 +88,21 @@ const encrypt = async (data: string) => {
   return ab2str(data);
 };
 
-export {encrypt, decrypt,RSAEncrypt, RSADecrypt, AESEncrypt, AESDecrypt}
+export {
+  setClientKeyPair,
+  setServerPublicKey,
+  encrypt,
+  decrypt,
+  RSAEncrypt,
+  RSADecrypt,
+  AESEncrypt,
+  AESDecrypt,
+  generateAESKey,
+  generateRSASign,
+  str2ab,
+  abConcatenate,
+  ab2base64Str,
+  base64Str2ab,
+  number2ab,
+  ab2str,
+};

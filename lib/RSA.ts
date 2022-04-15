@@ -1,6 +1,10 @@
 import { ab2base64Str, base64Str2ab, str2ab } from "./utils";
-// 环境变量
-const {VITE_CLIENT_PRIVATE_KEY, VITE_CLIENT_PUBLIC_KEY, VITE_SERVER_PUBLIC_KEY} = import.meta.env
+
+const {
+  VITE_CLIENT_PRIVATE_KEY,
+  VITE_CLIENT_PUBLIC_KEY,
+  VITE_SERVER_PUBLIC_KEY,
+} = import.meta?.env || {};
 const RSA_CONFIG = {
   name: "RSA-OAEP",
   hash: { name: "SHA-256" },
@@ -8,15 +12,33 @@ const RSA_CONFIG = {
 // console.log(import.meta.env)
 
 export const clientRSAKeyPair: TRSAKeyPair = {
-  PRIVATE_KEY:
-  VITE_CLIENT_PRIVATE_KEY,
-  PUBLIC_KEY:
-  VITE_CLIENT_PUBLIC_KEY,
+  PRIVATE_KEY: VITE_CLIENT_PRIVATE_KEY,
+  PUBLIC_KEY: VITE_CLIENT_PUBLIC_KEY,
 };
 
 export const serverRSAKeyPair = {
-  PUBLIC_KEY:
-  VITE_SERVER_PUBLIC_KEY,
+  PUBLIC_KEY: VITE_SERVER_PUBLIC_KEY,
+};
+/**
+ * 自定义设置客户端密钥
+ * @param clientPrivateKey
+ * @param clientPublicKey
+ */
+export const setClientKeyPair = (
+  clientPrivateKey: string,
+  clientPublicKey?: string
+) => {
+  clientRSAKeyPair.PRIVATE_KEY = clientPrivateKey;
+  if (clientPublicKey) {
+    clientRSAKeyPair.PUBLIC_KEY = clientPublicKey;
+  }
+};
+/**
+ * 自定义设置客户端公钥
+ * @param serverPublicKey
+ */
+export const setServerPublicKey = (serverPublicKey: string) => {
+  serverRSAKeyPair.PUBLIC_KEY = serverPublicKey;
 };
 
 /*
@@ -124,7 +146,7 @@ export const generateRSASign = async (data: string) => {
   return null;
 };
 /**
- * 验证签名
+ * 验证客户端自己生成的签名
  */
 export const verifySign = async (sign: string, data: string) => {
   const publicKey = await base64Key2CryptoSignKey(
@@ -143,7 +165,7 @@ export const verifySign = async (sign: string, data: string) => {
 /*
  加密
  */
-export const RSAEncrypt = async (publicKey: string, data: ArrayBuffer, ) => {
+export const RSAEncrypt = async (publicKey: string, data: ArrayBuffer) => {
   const bufferKey = await base64Key2CryptoKey(publicKey, false);
   if (bufferKey !== null) {
     const buffer = await window.crypto.subtle.encrypt(
@@ -162,7 +184,7 @@ export const RSAEncrypt = async (publicKey: string, data: ArrayBuffer, ) => {
  */
 export const RSADecrypt = async (privateKey: string, textAb: ArrayBuffer) => {
   const bufferKey = await base64Key2CryptoKey(privateKey, true);
- 
+
   if (bufferKey !== null) {
     const buffer = await window.crypto.subtle.decrypt(
       {
