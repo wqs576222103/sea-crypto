@@ -1,4 +1,4 @@
 type TRSAKeyPair = {
-  PRIVATE_KEY: string | null;
-  PUBLIC_KEY: string | null;
+  PRIVATE_KEY: string;
+  PUBLIC_KEY: string;
 };

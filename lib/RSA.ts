@@ -1,70 +1,36 @@
-import { ab2base64Str, base64Str2ab, str2ab } from "./utils";
+import { ab2base64Str, base64Str2ab } from "./utils";
 
-const {
-  VITE_CLIENT_PRIVATE_KEY,
-  VITE_CLIENT_PUBLIC_KEY,
-  VITE_SERVER_PUBLIC_KEY,
-} = import.meta?.env || {};
 const RSA_CONFIG = {
   name: "RSA-OAEP",
   hash: { name: "SHA-256" },
 };
-// console.log(import.meta.env)
-
-export const clientRSAKeyPair: TRSAKeyPair = {
-  PRIVATE_KEY: VITE_CLIENT_PRIVATE_KEY,
-  PUBLIC_KEY: VITE_CLIENT_PUBLIC_KEY,
-};
-
-export const serverRSAKeyPair = {
-  PUBLIC_KEY: VITE_SERVER_PUBLIC_KEY,
-};
-/**
- * 自定义设置客户端密钥
- * @param clientPrivateKey
- * @param clientPublicKey
- */
-export const setClientKeyPair = (
-  clientPrivateKey: string,
-  clientPublicKey?: string
+export const RSACryptoKey2BufferKey = async (
+  key: CryptoKey,
+  isPrivate: boolean
 ) => {
-  clientRSAKeyPair.PRIVATE_KEY = clientPrivateKey;
-  if (clientPublicKey) {
-    clientRSAKeyPair.PUBLIC_KEY = clientPublicKey;
-  }
+  return window.crypto.subtle.exportKey(isPrivate ? "pkcs8" : "spki", key);
 };
-/**
- * 自定义设置客户端公钥
- * @param serverPublicKey
- */
-export const setServerPublicKey = (serverPublicKey: string) => {
-  serverRSAKeyPair.PUBLIC_KEY = serverPublicKey;
-};
-
 /*
  CryptoKey转base64(pem)格式
  */
-async function cryptoKey2Base64Key(key: CryptoKey, isPrivate: boolean) {
+export async function RSACryptoKey2Base64Key(
+  key: CryptoKey,
+  isPrivate: boolean
+): Promise<string> {
   try {
-    const exported = await window.crypto.subtle.exportKey(
-      isPrivate ? "pkcs8" : "spki",
-      key
-    );
+    const exported = await RSACryptoKey2BufferKey(key, isPrivate);
     const exportedAsBase64 = ab2base64Str(exported);
     return exportedAsBase64;
   } catch (error) {
     console.log(error);
   }
-  return null;
+  return "";
 }
 
-/*
- base64(pem)格式转CryptoKey
- */
-function base64Key2CryptoKey(pem: string, isPrivate: boolean) {
-  // convert from a binary string to an ArrayBuffer
-  const binaryDer = base64Str2ab(pem);
-
+export const RSABufferKeyCryptoKey = async (
+  binaryDer: ArrayBuffer,
+  isPrivate: boolean
+) => {
   return window.crypto.subtle.importKey(
     isPrivate ? "pkcs8" : "spki",
     binaryDer,
@@ -75,20 +41,25 @@ function base64Key2CryptoKey(pem: string, isPrivate: boolean) {
     true,
     [isPrivate ? "decrypt" : "encrypt"]
   );
-}
+};
+/*
+ base64(pem)格式转CryptoKey
+ */
+export function RSABase64Key2CryptoKey(
+  pem: string,
+  isPrivate: boolean
+): Promise<CryptoKey> {
+  // convert from a binary string to an ArrayBuffer
+  const binaryDer = base64Str2ab(pem);
 
-async function savePublicKey(publicKey: CryptoKey) {
-  clientRSAKeyPair.PUBLIC_KEY = await cryptoKey2Base64Key(publicKey, false);
-}
-async function savePrivateKey(privateKey: CryptoKey) {
-  clientRSAKeyPair.PRIVATE_KEY = await cryptoKey2Base64Key(privateKey, true);
+  return RSABufferKeyCryptoKey(binaryDer, isPrivate);
 }
 
 /*
  自定义生成密钥对
  */
-export const generateRSAKey = async () => {
-  const keyPair = await window.crypto.subtle.generateKey(
+export const generateRSAKey = async (): Promise<CryptoKeyPair> => {
+  return window.crypto.subtle.generateKey(
     {
       name: RSA_CONFIG.name,
       // Consider using a 4096-bit key for systems that require long-term security
@@ -99,21 +70,23 @@ export const generateRSAKey = async () => {
     true,
     ["encrypt", "decrypt"]
   );
-  await savePublicKey(keyPair.publicKey);
-  await savePrivateKey(keyPair.privateKey);
-  return clientRSAKeyPair;
+  // const publicKey = await RSACryptoKey2Base64Key(keyPair.publicKey, false);
+  // const privateKey = await RSACryptoKey2Base64Key(keyPair.privateKey, true);
+  // return {
+  //   publicKey,
+  //   privateKey,
+  // };
 };
 
-export const base64Key2CryptoSignKey = (
-  key: string,
+export const RSACryptoKey2SignKey = (
+  key: ArrayBuffer,
   isPrivate: boolean,
   keyUsages: KeyUsage[]
-) => {
-  const binaryDer = base64Str2ab(key);
+): Promise<CryptoKey> => {
   // @ts-ignore
   return window.crypto.subtle.importKey(
     isPrivate ? "pkcs8" : "spki",
-    binaryDer,
+    key,
     {
       name: "RSASSA-PKCS1-v1_5",
       // Consider using a 4096-bit key for systems that require long-term security
@@ -129,71 +102,55 @@ export const base64Key2CryptoSignKey = (
 /*
  生成签名
  */
-export const generateRSASign = async (data: string) => {
-  const privateKey = await base64Key2CryptoSignKey(
-    clientRSAKeyPair.PRIVATE_KEY || "",
-    true,
-    ["sign"]
-  );
-  if (privateKey !== null) {
-    let buffer = await window.crypto.subtle.sign(
-      "RSASSA-PKCS1-v1_5",
-      privateKey,
-      str2ab(data)
-    );
-    return ab2base64Str(buffer);
-  }
-  return null;
+export const generateRSASign = async (
+  privateKey: ArrayBuffer,
+  data: ArrayBuffer
+): Promise<ArrayBuffer> => {
+
+  const signKey = await RSACryptoKey2SignKey(privateKey, true, ["sign"]);
+  return window.crypto.subtle.sign("RSASSA-PKCS1-v1_5", signKey, data);
 };
 /**
  * 验证客户端自己生成的签名
  */
-export const verifySign = async (sign: string, data: string) => {
-  const publicKey = await base64Key2CryptoSignKey(
-    clientRSAKeyPair.PUBLIC_KEY || "",
-    false,
-    ["verify"]
-  );
-  return window.crypto.subtle.verify(
-    "RSASSA-PKCS1-v1_5",
-    publicKey,
-    base64Str2ab(sign),
-    str2ab(data)
-  );
+export const verifySign = async (
+  publicKey: ArrayBuffer,
+  sign: ArrayBuffer,
+  data: ArrayBuffer
+): Promise<boolean> => {
+  const signKey = await RSACryptoKey2SignKey(publicKey || "", false, [
+    "verify",
+  ]);
+  return window.crypto.subtle.verify("RSASSA-PKCS1-v1_5", signKey, sign, data);
 };
 
 /*
  加密
  */
-export const RSAEncrypt = async (publicKey: string, data: ArrayBuffer) => {
-  const bufferKey = await base64Key2CryptoKey(publicKey, false);
-  if (bufferKey !== null) {
-    const buffer = await window.crypto.subtle.encrypt(
-      {
-        name: RSA_CONFIG.name,
-      },
-      bufferKey,
-      data
-    );
-    return ab2base64Str(buffer);
-  }
-  return "";
+export const RSAEncrypt = (
+  publicKey: CryptoKey,
+  data: ArrayBuffer
+): Promise<ArrayBuffer> => {
+  return window.crypto.subtle.encrypt(
+    {
+      name: RSA_CONFIG.name,
+    },
+    publicKey,
+    data
+  );
 };
 /*
  解密
  */
-export const RSADecrypt = async (privateKey: string, textAb: ArrayBuffer) => {
-  const bufferKey = await base64Key2CryptoKey(privateKey, true);
-
-  if (bufferKey !== null) {
-    const buffer = await window.crypto.subtle.decrypt(
-      {
-        name: RSA_CONFIG.name,
-      },
-      bufferKey,
-      textAb
-    );
-    return buffer;
-  }
-  return new ArrayBuffer(0);
+export const RSADecrypt = async (
+  privateKey: CryptoKey,
+  text: ArrayBuffer
+): Promise<ArrayBuffer> => {
+  return window.crypto.subtle.decrypt(
+    {
+      name: RSA_CONFIG.name,
+    },
+    privateKey,
+    text
+  );
 };

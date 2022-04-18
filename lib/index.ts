@@ -1,13 +1,16 @@
-import { AESEncrypt, AESDecrypt, generateAESKey } from "./AES";
+import {
+  AESEncrypt,
+  AESDecrypt,
+  generateAESKey,
+  AESCryptoKey2BufferKey,
+  AESBufferKey2CryptoKey,
+} from "./AES";
 
 import {
   RSAEncrypt,
-  clientRSAKeyPair,
-  serverRSAKeyPair,
   generateRSASign,
   RSADecrypt,
-  setClientKeyPair,
-  setServerPublicKey,
+  RSABase64Key2CryptoKey,
 } from "./RSA";
 import {
   str2ab,
@@ -17,46 +20,70 @@ import {
   number2ab,
   ab2str,
 } from "./utils";
+const {
+  VITE_CLIENT_PRIVATE_KEY,
+  // VITE_CLIENT_PUBLIC_KEY,
+  VITE_SERVER_PUBLIC_KEY,
+} = import.meta.env || {};
+// console.log(import.meta.env)
+// 使用配置密钥加解密
+export const encrypt = async (data: string) => {
+  return encryptWithKey(VITE_CLIENT_PRIVATE_KEY, VITE_SERVER_PUBLIC_KEY, data);
+};
+// 使用配置密钥加解密
+export const decrypt = async (text: string) => {
+  return decryptWithKey(VITE_CLIENT_PRIVATE_KEY, VITE_SERVER_PUBLIC_KEY, text);
+};
 
-const encrypt = async (data: string) => {
+export const encryptWithKey = async (
+  clientPrivateKey: string,
+  serverPublicKey: string,
+  data: string
+) => {
+  // string key转换CryptoKey
+  const clientPrivateBufferKey = base64Str2ab(clientPrivateKey);
+  const serverPublicCryptoKey = await RSABase64Key2CryptoKey(
+    serverPublicKey,
+    false
+  );
   // 生成签名
-  const sign = (await generateRSASign(data)) || "";
-  // console.log("sign", sign);
+  const sign = await generateRSASign(clientPrivateBufferKey, str2ab(data));
   // 时间戳
   const timestemp = Date.now();
-  // console.log("timestemp", timestemp);
   // 组合 时间戳、签名、数据
-  const hybridBuffer = abConcatenate(
-    number2ab(timestemp),
-    base64Str2ab(sign),
-    str2ab(data)
-  );
+  const hybridBuffer = abConcatenate(number2ab(timestemp), sign, str2ab(data));
 
   // 生成会话密钥AESKey
-  const AESKey = (await generateAESKey()) || "";
-  // const AESKey = 'dFvRuiiKY+srZbgVbU/JFg=='
-  // console.log("AESKey", AESKey);
+  const AESKey = await generateAESKey();
   // 生成Nonce
-  const nonce = ab2base64Str(window.crypto.getRandomValues(new Uint8Array(16)));
-  // console.log("nonce", nonce);
+  const nonce = window.crypto.getRandomValues(new Uint8Array(16));
   // 加密数据
   let encrypt = await AESEncrypt(AESKey, hybridBuffer, nonce);
-  // console.log("encrypt", encrypt);
   // 用公钥加密的AESKey
-  const encryptAESKey =
-    (await RSAEncrypt(serverRSAKeyPair.PUBLIC_KEY, base64Str2ab(AESKey))) || "";
+
+  const bufferAESKey = await AESCryptoKey2BufferKey(AESKey);
+  const encryptAESKey = await RSAEncrypt(serverPublicCryptoKey, bufferAESKey);
   // console.log('encryptAESKey', encryptAESKey)
   // 组合 Nonce、加密会话密钥、加密数据
-  const result = abConcatenate(
-    base64Str2ab(nonce),
-    base64Str2ab(encryptAESKey),
-    base64Str2ab(encrypt)
-  );
+  const result = abConcatenate(nonce, encryptAESKey, encrypt);
 
   return ab2base64Str(result);
 };
-
-const decrypt = async (text: string) => {
+export const decryptWithKey = async (
+  clientPrivateKey: string,
+  serverPublicKey: string,
+  text: string
+) => {
+  // string key转换CryptoKey
+  const clientPrivateCryptoKey = await RSABase64Key2CryptoKey(
+    clientPrivateKey,
+    true
+  );
+  // console.log(serverPublicKey);
+  // const serverPublicCryptoKey = await RSABase64Key2CryptoKey(
+  //   serverPublicKey,
+  //   false
+  // );
   // base64转字节码
   const result = base64Str2ab(text);
   // 截取nonce
@@ -67,17 +94,10 @@ const decrypt = async (text: string) => {
   const encrypt = result.slice(16 + 256);
 
   // 获取AESKey
-  const AESKey = await RSADecrypt(
-    clientRSAKeyPair.PRIVATE_KEY || "",
-    encryptAESKey
-  );
-
+  const AESKey = await RSADecrypt(clientPrivateCryptoKey, encryptAESKey);
+  const cryptoAESKey = await AESBufferKey2CryptoKey(AESKey);
   // 获取解密后的组合数据
-  const hybridBuffer = await AESDecrypt(
-    ab2base64Str(AESKey),
-    ab2base64Str(encrypt),
-    ab2base64Str(nonce)
-  );
+  const hybridBuffer = await AESDecrypt(cryptoAESKey, encrypt, nonce);
 
   // // 截取时间戳 五分钟校验
   // const timestemp = hybridBuffer.slice(0, 8)
@@ -88,21 +108,6 @@ const decrypt = async (text: string) => {
   return ab2str(data);
 };
 
-export {
-  setClientKeyPair,
-  setServerPublicKey,
-  encrypt,
-  decrypt,
-  RSAEncrypt,
-  RSADecrypt,
-  AESEncrypt,
-  AESDecrypt,
-  generateAESKey,
-  generateRSASign,
-  str2ab,
-  abConcatenate,
-  ab2base64Str,
-  base64Str2ab,
-  number2ab,
-  ab2str,
-};
+export * from "./AES";
+export * from "./RSA";
+export * from "./utils";

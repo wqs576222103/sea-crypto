@@ -7,30 +7,14 @@ const AES_CONFIG = {
   length: 128,
 };
 
-/*
- CryptoKey转base64(pem)格式
- */
-async function cryptoKey2Base64Key(key: CryptoKey) {
-  try {
-    const exported = await window.crypto.subtle.exportKey("raw", key);
-    const exportedAsBase64 = ab2base64Str(exported);
-    const pemExported = `${exportedAsBase64
-      .replace(/[^\x00-\xff]/g, "$&\x01")
-      .replace(/.{64}\x01?/g, "$&\n")}`;
-    return pemExported;
-  } catch (error) {
-    console.log(error);
-  }
-  return null;
+export async function AESCryptoKey2BufferKey(
+  key: CryptoKey
+): Promise<ArrayBuffer> {
+  return window.crypto.subtle.exportKey("raw", key);
 }
-
-/*
- base64(pem)格式转CryptoKey
- */
-function base64Key2CryptoKey(pem: string) {
-  // convert from a binary string to an ArrayBuffer
-  const binaryDer = base64Str2ab(pem);
-
+export async function AESBufferKey2CryptoKey(
+  binaryDer: ArrayBuffer
+): Promise<CryptoKey> {
   return window.crypto.subtle.importKey(
     "raw",
     binaryDer,
@@ -41,10 +25,37 @@ function base64Key2CryptoKey(pem: string) {
 }
 
 /*
+ CryptoKey转base64(pem)格式
+ */
+export async function AESCryptoKey2Base64Key(key: CryptoKey): Promise<string> {
+  try {
+    const exported = await AESCryptoKey2BufferKey(key);
+    const exportedAsBase64 = ab2base64Str(exported);
+    const pemExported = `${exportedAsBase64
+      .replace(/[^\x00-\xff]/g, "$&\x01")
+      .replace(/.{64}\x01?/g, "$&\n")}`;
+    return pemExported;
+  } catch (error) {
+    console.log(error);
+  }
+  return "";
+}
+
+/*
+ base64(pem)格式转CryptoKey
+ */
+export function AESBase64Key2CryptoKey(pem: string): Promise<CryptoKey> {
+  // convert from a binary string to an ArrayBuffer
+  const binaryDer = base64Str2ab(pem);
+
+  return AESBufferKey2CryptoKey(binaryDer);
+}
+
+/*
  自定义生成密钥对
  */
-export const generateAESKey = async () => {
-  let key = await window.crypto.subtle.generateKey(
+export const generateAESKey = async (): Promise<CryptoKey> => {
+  return window.crypto.subtle.generateKey(
     {
       name: AES_CONFIG.name,
       length: AES_CONFIG.length,
@@ -52,35 +63,36 @@ export const generateAESKey = async () => {
     true,
     ["encrypt", "decrypt"]
   );
-  return cryptoKey2Base64Key(key);
-  // const rawKey = window.crypto.getRandomValues(new Uint8Array(16));
-  // return ab2base64Str(rawKey)
 };
 
-export const AESEncrypt = async (key: any, data:  ArrayBuffer, iv: string) => {
-  const privateKey = await base64Key2CryptoKey(key);
-  const buffer = await window.crypto.subtle.encrypt(
+export const AESEncrypt = async (
+  privateKey: CryptoKey,
+  data: ArrayBuffer,
+  iv: ArrayBuffer
+): Promise<ArrayBuffer> => {
+  return await window.crypto.subtle.encrypt(
     {
       name: AES_CONFIG.name,
-      counter: base64Str2ab(iv),
+      counter: iv,
       length: AES_CONFIG.length,
     },
     privateKey,
     data
   );
-  return ab2base64Str(buffer);
 };
 
-export const AESDecrypt = async (key: string, text: string, iv: string) => {
-  const publicKey = await base64Key2CryptoKey(key);
-  const buffer = await window.crypto.subtle.decrypt(
+export const AESDecrypt = async (
+  publicKey: CryptoKey,
+  text: ArrayBuffer,
+  iv: ArrayBuffer
+): Promise<ArrayBuffer> => {
+  return await window.crypto.subtle.decrypt(
     {
       name: AES_CONFIG.name,
-      counter: base64Str2ab(iv),
+      counter: iv,
       length: AES_CONFIG.length,
     },
     publicKey,
-    base64Str2ab(text)
+    text
   );
-  return buffer;
 };
