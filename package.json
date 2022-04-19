@@ -23,7 +23,7 @@
     "build:offiaccount": "vite build --mode offiaccount",
     "start": "vite",
     "cp": "mkdir -p viewKit && cp -r ./dist/ ./viewKit/ &&cp -r ./index.html ./viewKit/",
-    "preview": "yarn tsc && yarn cp",
+    "preview": "if [ -r dist/ ];then rm -r dist/;fi && yarn tsc && yarn cp",
     "test": "yarn build && jest",
     "release": "yarn build && np --no-2fa --branch main --message v%s",
     "release:test": "yarn build && np --no-2fa --branch main --message v%s --no-git "
