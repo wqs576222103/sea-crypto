@@ -27,7 +27,10 @@
             margin: 0 20px;
         }
     </style>
-    <!-- <script src="./dist/crypto.es.js"></script> -->
+    <script>
+        window.PRIVATE_KEY = `MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCev3EPpZo8zx9S63aZoae7fj8pHBSFyHXIRM7b94SoP6izO4tyhjKGU96MODdTwCyik6V8siyj6GZQM4+Vh9riI2F0U6ufOCaYXT2drjTQp4GlBnQPBJ+coSUFw0tjiJWRSyVIhfIg24feKGljkd9FM5hp/sWpS1xvaCTTHXP5yrTt2UwKZ5qRz3BpZ3+kEiQfdLJqX8CoHzb+bSTO2nViKbIW3s6StJrMSj68UrunNON46lR5JHe9EDfhw9SRpv4IitAuHOAwZ38/RlGwHAiC4J6aYQ3SbxGEsLUywsn0ZclN1R0tvSPSqNZwQiarlplH+fE55449ItUIa+qnyNHdAgMBAAECggEAULAf6IMU3XmtgzkZhEcteVhXBC84ozNb4ppOxnGN5PLObaODYoehYLN6d60POiuAxHXldHcfx4QVlQhQIAH4mF7BZx4sKnag72rdKatlPvUVKWsZTJTeB//EUKSOSh4fX8VhQvaKNnc/HQVPZAO+B2+NNbsAfudGKX420XO0Ai9fQMzvmqcmkXFoMw67uwrPjAO7/92+qk1U2/K7seI6SXqSTcJyDOiS1GaruXey1FiKqV2Ewos5nv9isp0ElIAq435SSFJttSaVgZSW7uNzFFPSapQR8HrleOxLnOeHn3sxNqJIYRq+OgexmQThDSEvU9G0HTu1fw8pXkBC3WF9RQKBgQDfGKJZNtHQmC6GPjt7UunD70VGs5uWI3XX9cdUYBmN80z950MaDgiiIuSPOaIxmQ3PUDBcDQnXdnECSkkWkFyZA6pMIJ7pUUnFraNuT0ZllNYGSYxLzzDrzb4jtI3qojBBctmNa/8rv+9v6bafhbKMIdMO2OR/fYMktbdvMX86XwKBgQC2KTosVm8xREJd+PsSX/h0TTW66466Jz2viJfcVwHLzqSqWK/xDSurdu7DvpOkDcXyMvogBAQ3BLLa3GEGtdMKj0zgzrjTHaPnDGAECVYON1vEeq5AVEivHHJz6UxI8huUjXdoWiFELFjczV4hlrT93vTYx9sgrgUNdsJGtsVVQwKBgQCGmIMiFevB0H6JKTSTs7MrLcj63dNpYl1vfG3U3uGr/XSe3o5iQsM8ppaEPn43NCLbx4JVltwwLNoDSrQLs+7ZthdhNHELTKqYY6jtHVDYalIxmt/UwNy/9vHW8tCIFW/NnK/aHaTmTTb0qukuFuhgmOuP0pUQwbWESUmxAQjEOwKBgHRdR70VBfjZ2u9+4pwtVGCvBdi/KzC9aolcX24w4oPYIJZ1CweYW0IwOnwunM/awI1khSW4ixy+Uqa+yvhnZEZFnl2pkKXENHSfEiLh9+gi8utDV1bewIOkT3S+Hq4mgvnVmOa/VKrhDW8Xfb9FL59RMuXcXZ21rKKaL6bOkKZTAoGASc9Yst39DUihR6oWB/nj/PdubFv+6t6bJ/mH6atkvGCMVR4Uf+qMhmGZaATFTr9B57AueyDQER4y+n43V2MWR1jCxfcJU96dMLZnIkgnHUWpfX68dmy1Qwb6ik1OiBRjCwwFOl4H+rVt8BTRxNQa5XbdyR4iUM9xYh3VQLk2W9U=`
+        window.PUBLIC_KEY = `MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqNry+b+4Y0CRr7vWEhguXMa6KMmV1UjkVOhHFD3VkhQfWyqO2qJi95uFNE1ZgTprnEbh2w1lAY88wAnWGZD8LtR7N+qzoBLfF+/HBPBTVjxSaXZwBkUdCrcK87EzPdPdtvQ1BtsWMB3j5X9cQateQJjOBXEymqnIz980+zjE5rpfDJmB6lhYn/d/2gh8neoRN/6NY4UGtX5RSb4oDMXBhgnQKf2dTEGY0ISDe8GBUUS6YO3ftBVxtcYPmFcX8xM55462V30bIBpFBL/MNAjoOPYWP/uJ1vTEUCwzWDh7HSrlRWkk7ke/O5voKC07X8cyGJ3BSidN+6UXmWCwTMD8IwIDAQAB`
+    </script>
 </head>
 
 <body>
@@ -70,33 +73,17 @@
     </div>
 
     <script type="module">
-        import { encrypt, decrypt } from './crypto.es.js'
-
-
-        // // 请求前加密数据
-        // let data = { "username": "a", "email": "湿时说" }
-        // const encryptData = await encrypt(JSON.stringify(data))
-        // console.log('加密数据：', encryptData)
-
-
-        // // 解密后端返回数据
-        // const responseText = `JEbzgX25YHwVKU8nhN6n/ACB8mhV48xyXXa8HW1zg0rFm60dO6SsMUcK4LWtnKqTcnDvWC9piqBP6lO2/iRcrGxbR7vGDyNluuwXXv8lk7HyjRM7B6wJe2p3rO52zATzJvbUktQMx024Aw818yNZ9EKn8XiKYD/6wimSiQ/6I2mIsgi799E45rgy8trJGmtY9FIG6TX8HuaZ5Q+BEuFDrA6eq4jyVCKsQthmqJ70on52LVDiBD/lRY8xF2hMgq4evXfBeNV7xr/TncexqvokQDTgakCVDJkWKuOx91EuBaGbFwr032+mR/i+2f5Gc2o1pLRP77yQZN30AmLb2o9/Nsk6I34nXZQwtgTpU3QCXGbp9QXVRvqdFVmXc5Wizz8WEsBptDd7KnXtDvj0mfG5nr6YrPFoFVOqGHBFALNYPYwnfzqsT+HuB/Be1MgeZl3tIjWqvcRLFEGOrbZBzWQIko32FloSC8EA2RZXLa/QVE4C2pptGqB6ODmiMrqJpBMoizyloOIrAp1nhns+uL3t7K6UWMw/Wy6Q1rpRDZvS/S6xi0i2iqo6igOpToyUC7CvUPYShWewsDnvKO+en/W1qe35uHnM0U/FzRQSA8vaJD9cFB8ZVIgEFbaXDKKSIiBkFOFtGdGWsNPvfO64kxYWYPeBfsS97WLw7mQSgwV1AjqVAKRhIU+w5XxDE7KKsSxRpY0uY6Ag2bQaGOB/cGgNdG/oPnI0FNfuLpSyGBuSVZ372ggs/CBITSfDYyHEkqX8tT4rzUGhdiu+l/+Hp+mf787dEQ/A5jKultwZS4t9hAlkiP0R8+qNEVVzT8wjCMpVXcT75y5sF+4FBGcGWYkROwvlJrmdveIuVE3hwaQSFXeQ+cNwf2AnpHPEUkiHOVDKlt528eM8JIw0YyYn1+slq88B`
-        // const decryptData = await decrypt(responseText)
-        // console.log('解密数据：', decryptData)
-        // const res = JSON.parse(decryptData)
-        // if (res.code === 1001) {
-        //     console.log(res.data)
-        // }
+        import { encryptWithKey, decryptWithKey } from './crypto.es.js'
 
         document.querySelector('#encryptButton').addEventListener('click', async () => {
-            const decryptText = document.querySelector('#decryptData').value || ''
-            const encryptData = await encrypt(decryptText)
+            const decryptText = document.querySelector('#decryptData').value.trim() || ''
+            const encryptData = await encryptWithKey(PRIVATE_KEY, PUBLIC_KEY, decryptText)
             document.querySelector('#encryptData').value = encryptData
         })
         document.querySelector('#decryptButton').addEventListener('click', async () => {
-            const encryptText = document.querySelector('#encryptData').value || ''
+            const encryptText = document.querySelector('#encryptData').value.trim() || ''
             try {
-                const decryptData = await decrypt(encryptText)
+                const decryptData = await decryptWithKey(PRIVATE_KEY, PUBLIC_KEY, encryptText)
                 document.querySelector('#decryptData').value = decryptData
             } catch (error) {
                 console.log(error)
@@ -114,7 +101,7 @@
         document.querySelector('#decryptImgButton').addEventListener('click', async () => {
             const imgEncryptBase64Text = document.querySelector('#encryptImgData').value || ''
             try {
-                const decryptText = await decrypt(imgEncryptBase64Text)
+                const decryptText = await decryptWithKey(PRIVATE_KEY, PUBLIC_KEY, decryptText)
                 const res = JSON.parse(decryptText)
                 if (res.code === 1001) {
                     showImg(res.data)
@@ -127,7 +114,7 @@
         })
 
 
-    </script> 
+    </script>
 </body>
 
 </html>

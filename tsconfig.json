@@ -11,7 +11,7 @@
     "baseUrl": ".",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "Classic",
+    "moduleResolution": "node",
     "rootDirs": ["/lib", "./typings"],
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
@@ -31,5 +31,7 @@
     "node_modules",
     "build",
     "scripts",
+    "test",
+    "public",
   ]
 }

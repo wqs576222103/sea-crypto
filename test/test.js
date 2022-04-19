@@ -45,8 +45,6 @@ test("client encryptWith/decryptWith Test", async () => {
   global.window = dom.window;
   global.window.crypto = new Crypto();
   await encrypt(
-    KeyPair.PRIVATE_KEY,
-    KeyPair.PUBLIC_KEY,
     '1111111'
   );
   await decrypt(`F5NlJSz/UWKw7Wvwl7PKDhXUV9dbKqxJSKhWQiXpnKtUbNFoCD4eK941q0UuS1qtBk/Bbfbqtb2JvtMK/BmWLyDnmNGnlgYaUnXJ9gMJCLkHW3Wxc+5PIa5CWoL6H556+Csj/K268SdfettRbNEjpOpmUGlmtRe4rs4x8eItSPxnlFBp23ekkaHX+NpXo/c2padOPSdaLpRuHVJhfPq0RqxcSFDB75AkBnxq+AHfJJKlFqS2GIO8bpiN9EUSOVpWC2uhO7mxx//L2j/11A26GFmWWa4fUBfoK/80SLmMe6iTgWfiPKQlTkk7+hYHLq/xnfjygJ8fMMmNXXm7ci4CDLMWxVnTXzIfAEBeSe0hB9Cufrt/iDTH32q310EHm5HydRME4qvPQhdaJu1fOFemxVbKHGjYzRQBqFLItEJlJvhsuJDEUQioKN1i7gFoGR+28tzw0NW9HK5JmcYf5RWRZhedDo5NdpkpF1FG6xhGdyysyaPWo9Glrgeh2PZvWozNfjyPssv2GSmgg//RycPmoN02M05h7Lq8f1Hx+XeodhtDjL3vWgjHAalgqJDfZ1WoGUHRZyDL6ZF3y87ycXIW6k/U88DdVnL1+GAh9FyzE8I2uRwDPlFxSRfftcdZDNgHk6BL+mJJehgs1kRLfp+wMSEIW/5pqkmyisLhtB3rQNflRHDIj/gu/mqZw/OXICrzPlg0TMvIZb62bqyjDOA7jYyIGy9shDeGge+f0iDZqgXEey5MBlDR5lt1CfQgcpS3KsqSP/RtCF4NymkIrnqr35JtjGIHXygL4O1psnD/AI681o0ulYDIdgALP7wYLgP6YTsZw/EL7OWAQIUzbs38r9L/rasvv7H/NDPwwmByFBz/3iEk914wSiPp/MRYlXpIVBHnjEXWsJpTBxruHYNCKFntk7WXQj+ZWnUkcB+X+K2H87Iwife8OgJSQEpASuF9DSlhzrMGLOK4276cUPhXxxqztg==`);
