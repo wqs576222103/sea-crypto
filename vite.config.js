@@ -5,6 +5,7 @@ import vue from "@vitejs/plugin-vue";
 export default defineConfig({
   plugins: [vue()],
   build: {
+    target: 'es2016',
     lib: { // 开启库模式
       entry:  'lib/index.ts', // 设置入口文件
       name: '@wyny/crypto', // 起个名字，安装、引入用
