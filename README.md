@@ -53,7 +53,7 @@ yarn add @wyny/crypto
 
 - 也可以客户端自生成key,之后将生成的KeyPair.PUBLIC_KEY通过header等方式传给后端解密使用
 ```js
-import { generateRSAKey } from '@wyny/crypto'
+import { generateRSAKey, Crypto } from '@wyny/crypto'
 
     const KeyPair = await generateRSAKey()
     const crypto = new Crypto(KeyPair.PRIVATE_KEY, serverPublicKey);
