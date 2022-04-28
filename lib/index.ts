@@ -20,20 +20,6 @@ import {
   number2ab,
   ab2str,
 } from "./utils";
-const {
-  VITE_CLIENT_PRIVATE_KEY,
-  // VITE_CLIENT_PUBLIC_KEY,
-  VITE_SERVER_PUBLIC_KEY,
-} = import.meta.env || {};
-// console.log(import.meta.env)
-// 使用配置密钥加解密
-export const encrypt = async (data: string) => {
-  return encryptWithKey(VITE_CLIENT_PRIVATE_KEY, VITE_SERVER_PUBLIC_KEY, data);
-};
-// 使用配置密钥加解密
-export const decrypt = async (text: string) => {
-  return decryptWithKey(VITE_CLIENT_PRIVATE_KEY, VITE_SERVER_PUBLIC_KEY, text);
-};
 
 export const encryptWithKey = async (
   clientPrivateKey: string,
@@ -107,6 +93,39 @@ export const decryptWithKey = async (
   const data = hybridBuffer.slice(8 + 256);
   return ab2str(data);
 };
+
+const {
+  VITE_CLIENT_PRIVATE_KEY,
+  // VITE_CLIENT_PUBLIC_KEY,
+  VITE_SERVER_PUBLIC_KEY,
+} = import.meta.env || {};
+// console.log(import.meta.env)
+// 给特定系统、不同环境，如电网需求侧提供默认密钥的加解密方法
+export const encrypt = async (data: string) => {
+  return encryptWithKey(VITE_CLIENT_PRIVATE_KEY, VITE_SERVER_PUBLIC_KEY, data);
+};
+// 使用配置密钥加解密
+export const decrypt = async (text: string) => {
+  return decryptWithKey(VITE_CLIENT_PRIVATE_KEY, VITE_SERVER_PUBLIC_KEY, text);
+};
+
+export class Crypto {
+  private clientPrivateKey: string;
+  private serverPublicKey: string;
+
+  constructor(clientPrivateKey: string, serverPublicKey: string) {
+    this.clientPrivateKey = clientPrivateKey;
+    this.serverPublicKey = serverPublicKey;
+  }
+
+  encrypt = (data: string): Promise<string> => {
+    return encryptWithKey(this.clientPrivateKey, this.serverPublicKey, data);
+  };
+
+  decrypt = (text: string): Promise<string> => {
+    return decryptWithKey(this.clientPrivateKey, this.serverPublicKey, text);
+  };
+}
 
 export * from "./AES";
 export * from "./RSA";

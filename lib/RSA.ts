@@ -58,8 +58,8 @@ export function RSABase64Key2CryptoKey(
 /*
  自定义生成密钥对
  */
-export const generateRSAKey = async (): Promise<CryptoKeyPair> => {
-  return window.crypto.subtle.generateKey(
+export const generateRSAKey = async (): Promise<TRSAKeyPair> => {
+  const keyPair = await window.crypto.subtle.generateKey(
     {
       name: RSA_CONFIG.name,
       // Consider using a 4096-bit key for systems that require long-term security
@@ -70,12 +70,12 @@ export const generateRSAKey = async (): Promise<CryptoKeyPair> => {
     true,
     ["encrypt", "decrypt"]
   );
-  // const publicKey = await RSACryptoKey2Base64Key(keyPair.publicKey, false);
-  // const privateKey = await RSACryptoKey2Base64Key(keyPair.privateKey, true);
-  // return {
-  //   publicKey,
-  //   privateKey,
-  // };
+  const PUBLIC_KEY = await RSACryptoKey2Base64Key(keyPair.publicKey, false);
+  const PRIVATE_KEY = await RSACryptoKey2Base64Key(keyPair.privateKey, true);
+  return {
+    PUBLIC_KEY,
+    PRIVATE_KEY,
+  };
 };
 
 export const RSACryptoKey2SignKey = (
@@ -106,7 +106,6 @@ export const generateRSASign = async (
   privateKey: ArrayBuffer,
   data: ArrayBuffer
 ): Promise<ArrayBuffer> => {
-
   const signKey = await RSACryptoKey2SignKey(privateKey, true, ["sign"]);
   return window.crypto.subtle.sign("RSASSA-PKCS1-v1_5", signKey, data);
 };
