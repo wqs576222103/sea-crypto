@@ -64,7 +64,7 @@ import { generateRSAKey } from '@wyny/crypto'
 
     // 将生成的KeyPair.PUBLIC_KEY通过header等方式传给后端解密使用
     ....
-    
+
     const responseData = 'xxxxxxxxxxxx' // 后端返回的数据
     const decryptData = await crypto.decrypt(responseData)
     console.log('解密数据：', decryptData)
@@ -77,3 +77,7 @@ import { generateRSAKey } from '@wyny/crypto'
 
 原因： Web API window.crypto 仅支持在本地（localhost、127.0.0.1、file）、远程（https 域名访问）
 `````
+
+- 控制台报错 error:Maximum call stack size exceeded
+
+原因：加解密的数据量太大，加解密算法调用栈溢出。最好减少加解密数据量
