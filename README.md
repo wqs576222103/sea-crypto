@@ -32,7 +32,7 @@ yarn add @wyny/crypto
 
 - 基础使用
 
-`````js
+```js
     import { Crypto } from '@wyny/crypto'
     ...
     /**
@@ -48,8 +48,9 @@ yarn add @wyny/crypto
     ...
 ```
 
+
 - 也可以客户端自生成key,之后将生成的KeyPair.PUBLIC_KEY通过header等方式传给后端解密使用
-````js
+```js
 import { generateRSAKey } from '@wyny/crypto'
 
     const KeyPair = await generateRSAKey()
