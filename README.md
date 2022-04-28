@@ -43,7 +43,9 @@ yarn add @wyny/crypto
     let data = { "username": "a", "email": "b" }
     const encryptData = await crypto.encrypt(JSON.stringify(data))
     console.log('加密数据：', encryptData)
-    const decryptData = await crypto.decrypt(encryptData)
+    
+    const responseData = 'xxxxxxxxxxxx' // 后端返回的数据
+    const decryptData = await crypto.decrypt(responseData)
     console.log('解密数据：', decryptData)
     ...
 ```
@@ -62,8 +64,9 @@ import { generateRSAKey } from '@wyny/crypto'
 
     // 将生成的KeyPair.PUBLIC_KEY通过header等方式传给后端解密使用
     ....
-
-    const decryptData = await crypto.decrypt(encryptData)
+    
+    const responseData = 'xxxxxxxxxxxx' // 后端返回的数据
+    const decryptData = await crypto.decrypt(responseData)
     console.log('解密数据：', decryptData)
 
 ```
