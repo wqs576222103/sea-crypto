@@ -17,7 +17,7 @@ yarn preview
 // 运行测试用例
 yarn test
 
-// 发布工具到npm私服库上  http://172.16.11.82:4873/
+// 发布工具到npm私服库上
 yarn release
 
 ```
@@ -27,13 +27,13 @@ yarn release
 - 添加依赖
 
 ```
-yarn add @wyny/crypto
+yarn add @sea/crypto
 ```
 
 - 基础使用
 
 ```js
-    import { Crypto } from '@wyny/crypto'
+    import { Crypto } from '@sea/crypto'
     ...
     /**
     * clientPrivateKey 客户端私钥
@@ -53,7 +53,7 @@ yarn add @wyny/crypto
 
 - 也可以客户端自生成key,之后将生成的KeyPair.PUBLIC_KEY通过header等方式传给后端解密使用
 ```js
-import { generateRSAKey, Crypto } from '@wyny/crypto'
+import { generateRSAKey, Crypto } from '@sea/crypto'
 
     const KeyPair = await generateRSAKey()
     const crypto = new Crypto(KeyPair.PRIVATE_KEY, serverPublicKey);

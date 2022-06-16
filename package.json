@@ -1,5 +1,5 @@
 {
-  "name": "@wyny/crypto",
+  "name": "@sea/crypto",
   "version": "1.1.9",
   "description": "aes+rsa加解密工具",
   "main": "./dist/crypto.umd.js",
